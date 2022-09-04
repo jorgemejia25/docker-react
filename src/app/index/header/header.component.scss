@@ -1,0 +1,73 @@
+.header {
+  background: linear-gradient(
+      180deg,
+      rgba(43, 43, 43, 0.6979166666666667) 0%,
+      rgba(50, 59, 55, 0.9136029411764706) 100%
+    ),
+    url("./../../../assets/1.jpeg");
+  align-items: center;
+  background-attachment: fixed;
+  background-size: cover;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-family: "Playfair Display", serif;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  transform-style: preserve-3d;
+
+  h1 {
+    font-size: 8rem;
+    margin-bottom: 0;
+    font-family: "Great Vibes", cursive;
+  }
+
+  .label {
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 1rem;
+    letter-spacing: 0.3rem;
+    text-transform: uppercase;
+  }
+
+  .label-1 {
+    margin-top: 2rem;
+  }
+
+  .scroll-button {
+    color: white !important;
+    position: absolute;
+    bottom: 2rem;
+    padding: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    h1 {
+      font-size: 6rem;
+    }
+  }
+}
+
+@keyframes icon-animation {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+  75% {
+    transform: translateY(0);
+  }
+}
+
+@supports (-webkit-touch-callout: inherit) {
+  .header {
+    background-attachment: scroll;
+  }
+}

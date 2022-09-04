@@ -1,0 +1,29 @@
+<div class="login">
+  <form (submit)="sendForm()" class="login-container">
+    <h4 class="login-label">
+      <span>Iniciar sesión</span>
+    </h4>
+    <input
+      type="text"
+      [(ngModel)]="username"
+      pInputText
+      placeholder="Usuario"
+      name="username"
+    />
+    <input
+      [(ngModel)]="password"
+      type="password"
+      pInputText
+      placeholder="Contraseña"
+      name="password"
+      class="margin-top"
+    />
+    <p-button
+      class="margin-top"
+      label="Ingresar"
+      icon="pi pi-check"
+      type="submit"
+    ></p-button>
+  </form>
+</div>
+<p-toast  position="bottom-center"></p-toast>

@@ -1,0 +1,38 @@
+<h1>Administrador</h1>
+<div class="card">
+  <p-button
+    pRipple
+    styleClass="mb-2"
+    label="Nueva invitación"
+    icon="pi pi-plus"
+    (click)="showCreateDialog = true"
+  ></p-button>
+  <p-table>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Invitaciones</th>
+        <th>Estado</th>
+        <th>Confirmados</th>
+        <th>Link</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-invitacion>
+      <tr>
+        <td>{{ invitacion.id }}</td>
+        <td>{{ invitacion.nombre }}</td>
+        <td>{{ invitacion.invitaciones }}</td>
+        <td>{{ invitacion.estado }}</td>
+        <td>{{ invitacion.confirmados }}</td>
+        <td>
+          <a target="_blank" rel="noopener noreferrer"
+            >https://localhost/{{ invitacion.id }}</a
+          >
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog header="Crear invitado" [(visible)]="showCreateDialog"></p-dialog>

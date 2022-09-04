@@ -1,0 +1,30 @@
+.login {
+  align-items: center;
+  background-color: var(--primary-color);
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+
+  &-container {
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: auto;
+    padding: 1rem;
+  }
+
+  &-label {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.margin-top {
+  margin-top: 1rem;
+}

@@ -1,0 +1,76 @@
+.countdown-main {
+  overflow-x: hidden;
+  overflow-y: visible;
+  padding: 0.9rem;
+}
+
+.countdown-bg {
+  background-color: #98ada449;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+  max-width: 690px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 4rem;
+  transform: rotate(3deg);
+}
+
+.countdown {
+  background: linear-gradient(
+      180deg,
+      rgba(50, 59, 55, 0.962) 0%,
+      rgba(43, 43, 43, 0.878) 100%
+    ),
+    url("./../../../assets/5.jpeg");
+  align-items: center;
+  backdrop-filter: blur(10px);
+  background-position: top;
+  background-size: cover;
+  color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  justify-content: center;
+  width: 100%;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 100 !important;
+  overflow: hidden;
+  position: relative;
+  padding-inline: 0.3rems;
+  transform: rotate(357deg);
+
+  .countdown-container {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+
+  &-item {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 70px;
+    justify-content: center;
+    width: 70px;
+
+    &:nth-child(2) {
+      margin-inline: 1rem;
+    }
+
+    &-value {
+      font-size: 1.7rem;
+    }
+
+    &-label {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+      font-family: "Montserrat", sans-serif;
+    }
+  }
+}

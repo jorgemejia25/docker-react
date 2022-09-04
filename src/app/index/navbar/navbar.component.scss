@@ -1,0 +1,17 @@
+nav {
+  background-color: #e8f6f07f;
+  backdrop-filter: blur(10px);
+  position: fixed;
+  text-align: center;
+  padding: 0.5rem;
+  font-family: "Great Vibes", cursive;
+  width: 100%;
+  font-size: 2.3rem;
+  z-index: 99;
+  top: -100%;
+  transition: 1s all;
+}
+
+.show {
+  top: 0;
+}
