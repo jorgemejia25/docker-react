@@ -10,12 +10,65 @@ import { firstValueFrom } from 'rxjs';
 export class InvitacionService {
   private apiUrl = `${environment.apiUrl}/invitacion`;
   public invitaciones: Invitacion[] = [];
+  public confirmados: number = 0;
+  public rechazados: number = 0;
+  public pendientes: number = 0;
 
   constructor(private http: HttpClient) {}
 
   async findAll() {
-    return (this.invitaciones = await firstValueFrom(
+    this.invitaciones = await firstValueFrom(
       this.http.get<Invitacion[]>(this.apiUrl)
-    ));
+    );
+
+    this.calcularTotales();
+
+    return this.invitaciones;
+  }
+
+  async create(invitacion: Partial<Invitacion>) {
+    const res = await firstValueFrom(
+      this.http.post<Invitacion>(this.apiUrl, invitacion)
+    );
+
+    this.invitaciones.push(res);
+
+    this.calcularTotales();
+  }
+
+  async update(invitacion: Partial<Invitacion>) {
+    const res = await firstValueFrom(
+      this.http.put<Invitacion>(`${this.apiUrl}/${invitacion.id}`, invitacion)
+    );
+
+    const index = this.invitaciones.findIndex(
+      (inv) => inv.id === invitacion.id
+    );
+
+    this.invitaciones[index] = res;
+
+    this.calcularTotales();
+  }
+
+  async delete(id: number) {
+    await firstValueFrom(this.http.delete(`${this.apiUrl}/${id}`));
+
+    this.invitaciones = this.invitaciones.filter((inv) => inv.id !== id);
+
+    this.calcularTotales();
+  }
+
+  calcularTotales() {
+    this.confirmados = this.invitaciones
+      .filter((inv) => inv.estado === 'Confirmado')
+      .reduce((acc, inv) => acc + inv.invitaciones, 0);
+
+    this.rechazados = this.invitaciones
+      .filter((inv) => inv.estado === 'Rechazado')
+      .reduce((acc, inv) => acc + inv.invitaciones, 0);
+
+    this.pendientes = this.invitaciones
+      .filter((inv) => inv.estado === 'Pendiente')
+      .reduce((acc, inv) => acc + inv.invitaciones, 0);
   }
 }

@@ -1,6 +1,9 @@
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgModule } from '@angular/core';
 import { PasswordModule } from 'primeng/password';
@@ -20,6 +23,9 @@ import { ToastModule } from 'primeng/toast';
     ToastModule,
     RippleModule,
     DialogModule,
+    InputNumberModule,
+    DropdownModule,
+    ConfirmPopupModule,
   ],
 })
 export class PrimeModule {}

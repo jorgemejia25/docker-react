@@ -1,26 +1,72 @@
 <h1>Administrador</h1>
 <div class="card">
-  <p-button
-    pRipple
-    styleClass="mb-2"
-    label="Nueva invitación"
-    icon="pi pi-plus"
-    (click)="showCreateDialog = true"
-  ></p-button>
-  <p-table>
+  <div class="mb-5">
+    <p-button
+      pRipple
+      label="Nueva invitación"
+      icon="pi pi-plus"
+      (click)="showCreateDialog = true"
+    ></p-button>
+  </div>
+  <div class="text-xl mb-5">
+    Confirmados: {{ invitacionService.confirmados }} &nbsp;&nbsp; Pendientes:
+    {{ invitacionService.confirmados }}
+    &nbsp;&nbsp; Rechazados:
+    {{ invitacionService.rechazados }}
+    &nbsp;&nbsp; Total:
+    {{
+      invitacionService.confirmados +
+        invitacionService.pendientes +
+        invitacionService.rechazados
+    }}
+  </div>
+
+  <p-table
+    [value]="invitacionService.invitaciones"
+    [paginator]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    responsiveLayout="scroll"
+    [globalFilterFields]="['nombre', 'estado', 'invitaciones']"
+    #dt
+  >
+    <ng-template pTemplate="caption">
+      <div class="grid grid-cols-12 w-full">
+        <div class="col-span-12 md:col-span-9">
+          <span class="p-input-icon-left w-full ml-auto">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              class="w-full"
+              (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+              placeholder="Buscar"
+            />
+          </span>
+        </div>
+        <div class="col-span-12 md:col-span-3 mt-2 md:mt-0 md:ml-2">
+          <p-dropdown
+            [options]="['Confirmado', 'Pendiente', 'Rechazado']"
+            (onChange)="dt.filter($event.value, 'estado', 'equals')"
+            placeholder="Estado"
+            [style]="{ width: '100%' }"
+            [showClear]="true"
+          ></p-dropdown>
+        </div>
+      </div>
+    </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th>ID</th>
         <th>Nombre</th>
         <th>Invitaciones</th>
         <th>Estado</th>
         <th>Confirmados</th>
         <th>Link</th>
+        <th></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-invitacion>
       <tr>
-        <td>{{ invitacion.id }}</td>
         <td>{{ invitacion.nombre }}</td>
         <td>{{ invitacion.invitaciones }}</td>
         <td>{{ invitacion.estado }}</td>
@@ -30,9 +76,208 @@
             >https://localhost/{{ invitacion.id }}</a
           >
         </td>
+        <td>
+          <p-button
+            pRipple
+            icon="pi pi-share-alt"
+            class="mr-3"
+            (click)="copyToClipboard('https://localhost/' + invitacion.id)"
+            styleClass="p-button-raised p-button-rounded p-button-secondary"
+          ></p-button>
+          <p-button
+            pRipple
+            icon="pi pi-pencil"
+            class="mr-3"
+            styleClass="p-button-raised p-button-text p-button-rounded p-button-secondary"
+            (click)="openEditDialog(invitacion)"
+          ></p-button>
+          <p-button
+            pRipple
+            (click)="deleteInvitacion(invitacion, $event)"
+            icon="pi pi-trash"
+            styleClass="p-button-raised p-button-text p-button-rounded p-button-danger"
+          ></p-button>
+        </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
 
-<p-dialog header="Crear invitado" [(visible)]="showCreateDialog"></p-dialog>
+<div class="p-2"></div>
+
+<p-dialog header="Crear invitado" [modal]="true" [(visible)]="showCreateDialog">
+  <form
+    (submit)="createSubmit()"
+    [formGroup]="createForm"
+    class="grid grid-cols-12"
+  >
+    <div class="col-span-12">
+      <label for="nombre" class="block mb-2">Nombre</label>
+      <input
+        id="nombre"
+        type="text"
+        class="form-input w-full"
+        aria-describedby="nombre-help"
+        pInputText
+        formControlName="nombre"
+        [ngClass]="{
+          'ng-dirty ng-invalid':
+            createForm.get('nombre')?.invalid &&
+            createForm.get('nombre')?.touched
+        }"
+      />
+      <small
+        id="nombre-help"
+        class="p-error block mt-1"
+        *ngIf="
+          createForm.get('nombre')?.invalid && createForm.get('nombre')?.touched
+        "
+      >
+        El nombre no puede estar vacío</small
+      >
+    </div>
+    <div class="col-span-12 md:col-span-6">
+      <label for="invitaciones" class="block my-2">Invitaciones</label>
+      <p-inputNumber
+        name="invitaciones"
+        styleClass=" w-full"
+        [showButtons]="true"
+        [min]="1"
+        incrementButtonClass="p-button-secondary"
+        decrementButtonClass="p-button-secondary"
+        formControlName="invitaciones"
+        [ngClass]="{
+          'ng-dirty ng-invalid':
+            createForm.get('invitaciones')?.invalid &&
+            createForm.get('invitaciones')?.touched
+        }"
+      ></p-inputNumber>
+
+      <small
+        id="invitaciones-help"
+        class="p-error block mt-1"
+        *ngIf="
+          createForm.get('invitaciones')?.invalid &&
+          createForm.get('invitaciones')?.touched
+        "
+      >
+        Campo vacío</small
+      >
+    </div>
+    <div class="col-span-12 md:col-span-6 md:ml-2">
+      <label for="confirmados" class="block my-2">Confirmados </label>
+      <p-inputNumber
+        name="confirmados"
+        styleClass=" w-full"
+        [showButtons]="true"
+        [min]="0"
+        incrementButtonClass="p-button-secondary"
+        decrementButtonClass="p-button-secondary"
+        formControlName="confirmados"
+      ></p-inputNumber>
+    </div>
+    <div class="col-span-12">
+      <label for="estado" class="block my-2">Estado</label>
+      <p-dropdown
+        name="estado"
+        class="w-full"
+        appendTo="body"
+        [options]="['Pendiente', 'Confirmado']"
+        [style]="{ width: '100%' }"
+        formControlName="estado"
+      ></p-dropdown>
+    </div>
+    <div class="col-span-12 mt-5">
+      <p-button label="Agregar" icon="pi pi-plus" type="submit"></p-button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog header="Editar invitado" [modal]="true" [(visible)]="showEditDialog">
+  <form
+    (submit)="editSubmit()"
+    [formGroup]="editForm"
+    class="grid grid-cols-12"
+  >
+    <div class="col-span-12">
+      <label for="nombre" class="block mb-2">Nombre</label>
+      <input
+        id="nombre"
+        type="text"
+        class="form-input w-full"
+        aria-describedby="nombre-help"
+        pInputText
+        formControlName="nombre"
+        [ngClass]="{
+          'ng-dirty ng-invalid':
+            editForm.get('nombre')?.invalid && editForm.get('nombre')?.touched
+        }"
+      />
+      <small
+        id="nombre-help"
+        class="p-error block mt-1"
+        *ngIf="
+          editForm.get('nombre')?.invalid && editForm.get('nombre')?.touched
+        "
+      >
+        El nombre no puede estar vacío</small
+      >
+    </div>
+    <div class="col-span-12 md:col-span-6">
+      <label for="invitaciones" class="block my-2">Invitaciones</label>
+      <p-inputNumber
+        name="invitaciones"
+        styleClass=" w-full"
+        [showButtons]="true"
+        [min]="1"
+        incrementButtonClass="p-button-secondary"
+        decrementButtonClass="p-button-secondary"
+        formControlName="invitaciones"
+        [ngClass]="{
+          'ng-dirty ng-invalid':
+            editForm.get('invitaciones')?.invalid &&
+            editForm.get('invitaciones')?.touched
+        }"
+      ></p-inputNumber>
+
+      <small
+        id="invitaciones-help"
+        class="p-error block mt-1"
+        *ngIf="
+          editForm.get('invitaciones')?.invalid &&
+          editForm.get('invitaciones')?.touched
+        "
+      >
+        Campo vacío</small
+      >
+    </div>
+    <div class="col-span-12 md:col-span-6 md:ml-2">
+      <label for="confirmados" class="block my-2">Confirmados</label>
+      <p-inputNumber
+        name="confirmados"
+        styleClass=" w-full"
+        [showButtons]="true"
+        [min]="0"
+        incrementButtonClass="p-button-secondary"
+        decrementButtonClass="p-button-secondary"
+        formControlName="confirmados"
+      ></p-inputNumber>
+    </div>
+    <div class="col-span-12">
+      <label for="estado" class="block my-2">Estado</label>
+      <p-dropdown
+        name="estado"
+        class="w-full"
+        appendTo="body"
+        [options]="['Pendiente', 'Confirmado']"
+        [style]="{ width: '100%' }"
+        formControlName="estado"
+      ></p-dropdown>
+    </div>
+    <div class="col-span-12 mt-5">
+      <p-button label="Editar" icon="pi pi-pencil" type="submit"></p-button>
+    </div>
+  </form>
+</p-dialog>
+<p-toast position="bottom-center"></p-toast>
+<p-confirmPopup></p-confirmPopup>
