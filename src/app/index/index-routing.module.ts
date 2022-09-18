@@ -11,6 +11,10 @@ const routes: Routes = [
         path: '',
         component: IndexComponent,
       },
+      {
+        path: 'confirmar/:id',
+        component: IndexComponent,
+      },
     ],
   },
 ];

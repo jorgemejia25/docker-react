@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
+import { ConfirmarComponent } from './confirmar/confirmar.component';
 import { CountdownComponent } from './countdown/countdown.component';
+import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
 import { ImagesComponent } from './images/images.component';
 import { IndexComponent } from './index.component';
@@ -10,6 +12,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { NgModule } from '@angular/core';
 import { PrimeModule } from '../prime/prime.module';
 import { RegalosComponent } from './regalos/regalos.component';
+import { ImagesTwoComponent } from './images-two/images-two.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,9 @@ import { RegalosComponent } from './regalos/regalos.component';
     ImagesComponent,
     RegalosComponent,
     NavbarComponent,
+    ConfirmarComponent,
+    ImagesTwoComponent,
   ],
-  imports: [CommonModule, IndexRoutingModule, PrimeModule],
+  imports: [CommonModule, FormsModule, IndexRoutingModule, PrimeModule],
 })
 export class IndexModule {}

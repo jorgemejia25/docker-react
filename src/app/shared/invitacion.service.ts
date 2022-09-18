@@ -71,4 +71,22 @@ export class InvitacionService {
       .filter((inv) => inv.estado === 'Pendiente')
       .reduce((acc, inv) => acc + inv.invitaciones, 0);
   }
+
+  async getInvitacion(id: number) {
+    return await firstValueFrom(
+      this.http.get<Invitacion>(`${this.apiUrl}/${id}`)
+    );
+  }
+
+  async confirmar(id: number, confirmados: number) {
+    return await firstValueFrom(
+      this.http.get(`${this.apiUrl}/confirmar/${id}`, {
+        params: { confirmados },
+      })
+    );
+  }
+
+  async rechazar(id: number) {
+    return await firstValueFrom(this.http.get(`${this.apiUrl}/rechazar/${id}`));
+  }
 }
